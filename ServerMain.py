@@ -1,6 +1,18 @@
 import numpy as np
-import requests
 import sys
+import datetime
+from simple_websocket_server import WebSocketServer, WebSocket
+
+class SimpleEcho(WebSocket):
+	def handle(self):
+		self.send_message(self.data)
+		print(self.data)
+
+	def connected(self):
+		print(self.address, 'connected')
+
+	def handle_close(self):
+		print(self.address, 'closed')
 
 def main():
 	if len(sys.argv) != 3:
@@ -27,6 +39,14 @@ def main():
 		exit()
 	greed = CreateGreed(greedSize)
 	greed = SetObstacleOnGreed(greed, obstacle)
+
+	OpenServerWebsocket()
+
+	
+
+def OpenServerWebsocket():
+	server = WebSocketServer('localhost', 3000, SimpleEcho)
+	server.serve_forever()
 
 
 def CreateGreed(greedSize):
