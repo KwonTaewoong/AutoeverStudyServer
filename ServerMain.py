@@ -18,9 +18,12 @@ def main():
 		def handle(self):
 			print(self.data)
 			if (self.data == "GetGreed"):
-				self.send_message(str(len(greed)))
+				self.send_message("greed:"+str(len(greed)))
 			elif (self.data == "GetObs"):
 				self.send_message(str(obstacle))
+			elif (self.data == "GetAllGreed"):
+				print(str(greed))
+				self.send_message("getAllGreed:"+str(greed))
 
 
 		def connected(self):
@@ -55,6 +58,8 @@ def main():
 	greed = CreateGreed(greedSize)
 
 	greed = SetObstacleOnGreed(greed, obstacle)
+	print("=======Map======")
+	print(greed)
 
 	server = WebSocketServer('localhost', 3000, SimpleEcho)
 	SimpleEcho.SetData(greed, obstacle)
