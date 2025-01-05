@@ -24,6 +24,58 @@ def main():
 			elif (self.data == "GetAllGreed"):
 				print(str(greed))
 				self.send_message("getAllGreed:"+str(greed))
+			elif "GetObjectRoot" in self.data:
+				dataList = self.data.split(',')
+				currentX = int(dataList[3])
+				currentY = len(greed) - 1
+				size = len(greed) - 1
+				destX = int(dataList[2])
+				destY = 0
+
+				print(greed[currentY, currentX])
+				root = []
+				
+				while(True):
+					if (greed[currentY-1, currentX] != 1 and currentY != 0):
+						currentY = currentY-1
+						root.append([currentX, currentY])
+					else:
+						if (currentX > destX):
+							if (currentX == 0):
+								currentX = currentX+1
+								root.append([currentX, currentY])
+
+							else:
+								if (greed[currentY, currentX-1] != 1):
+									currentX = currentX-1
+									root.append([currentX, currentY])
+
+								else:
+									currentX = currentX+1
+									root.append([currentX, currentY])
+
+						else:
+							if (currentX == size):
+								currentX = currentX-1
+								root.append([currentX, currentY])
+
+							else:
+								if (greed[currentY, currentX+1] != 1):
+									currentX = currentX+1
+									root.append([currentX, currentY])
+
+								else:
+									currentX = currentX-1
+									root.append([currentX, currentY])
+
+							
+					print(root)
+					if (currentX == destX and currentY == destY):
+						break
+
+				
+
+
 
 
 		def connected(self):
