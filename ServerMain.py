@@ -68,12 +68,10 @@ def main():
 									currentX = currentX-1
 									root.append([currentX, currentY])
 
-							
-					print(root)
 					if (currentX == destX and currentY == destY):
 						break
 
-				
+				self.send_message("getRoot:"+dataList[1]+":"+str(root))
 
 
 
