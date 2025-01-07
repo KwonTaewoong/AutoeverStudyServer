@@ -7,16 +7,22 @@ from simple_websocket_server import WebSocketServer, WebSocket
 
 
 def main():
+
 	class SimpleEcho(WebSocket):
 		greed = None
 		obstacle = None
+		socketLog = None
 
-		def SetData(Greed, Obstacle):
+
+		def SetData(Greed, Obstacle, SocketLog):
 			greed = Greed
 			obstacle = Obstacle
+			socketLog = SocketLog
+
+
 
 		def handle(self):
-			print(self.data)
+
 			if (self.data == "GetGreed"):
 				self.send_message("greed:"+str(len(greed)))
 			elif (self.data == "GetObs"):
@@ -73,6 +79,12 @@ def main():
 
 				self.send_message("getRoot:"+dataList[1]+":"+str(root))
 
+			elif "objectID" in self.data:
+				socketLog = open("./logFile.txt", 'a')
+				socketLog.write(self.data)
+				socketLog.close()
+
+
 
 
 
@@ -106,13 +118,15 @@ def main():
 		exit()
 
 	greed = CreateGreed(greedSize)
-
+	socketLog = open("logFile.txt", 'w')
+	socketLog.close()
 	greed = SetObstacleOnGreed(greed, obstacle)
 	print("=======Map======")
 	print(greed)
 
+
 	server = WebSocketServer('localhost', 3000, SimpleEcho)
-	SimpleEcho.SetData(greed, obstacle)
+	SimpleEcho.SetData(greed, obstacle, socketLog)
 
 	server.serve_forever()
 
