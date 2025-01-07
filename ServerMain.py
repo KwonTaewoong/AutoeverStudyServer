@@ -8,6 +8,7 @@ from simple_websocket_server import WebSocketServer, WebSocket
 
 def main():
 
+#웹 소켓 구현 부분
 	class SimpleEcho(WebSocket):
 		greed = None
 		obstacle = None
@@ -41,6 +42,7 @@ def main():
 				print(greed[currentY, currentX])
 				root = []
 				
+				#rule based에 의한 시뮬레이션 영역
 				while(True):
 					if (greed[currentY-1, currentX] != 1 and currentY != 0):
 						currentY = currentY-1
@@ -79,13 +81,10 @@ def main():
 
 				self.send_message("getRoot:"+dataList[1]+":"+str(root))
 
+			#로깅 영역
 			elif "objectID" in self.data:
-				socketLog = open("./logFile.txt", 'a')
+
 				socketLog.write(self.data)
-				socketLog.close()
-
-
-
 
 
 		def connected(self):
@@ -94,6 +93,8 @@ def main():
 		def handle_close(self):
 			print(self.address, 'closed')
 
+
+#잘못된 input 파라미터에 대한 반환 부분
 	if len(sys.argv) != 3:
 		print ("argument size is not 2")
 		exit()
@@ -117,9 +118,11 @@ def main():
 		print ("obstacle is smaller than greedSize")
 		exit()
 
+
+#그리드 형성
 	greed = CreateGreed(greedSize)
-	socketLog = open("logFile.txt", 'w')
-	socketLog.close()
+	socketLog = open("logFile.txt", 'a')
+
 	greed = SetObstacleOnGreed(greed, obstacle)
 	print("=======Map======")
 	print(greed)
@@ -135,7 +138,7 @@ def CreateGreed(greedSize):
 	greed = np.zeros((greedSize, greedSize))
 	return greed
 
-
+#차원 변경을 통한 장애물 랜덤 배치 함수
 def SetObstacleOnGreed(greed, obstacle):
 	temp = greed[1:len(greed)-1,:]
 	originShape = temp.shape
